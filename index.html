@@ -145,7 +145,7 @@ document.getElementById('proBtn').onclick = async()=>{
     const pkg = offerings.current?.monthly || offerings.current?.availablePackages[0]
     if(!pkg) return alert('No RevenueCat packages found - create offering in RevenueCat dashboard')
     const result = await Purchases.purchasePackage(pkg)
-    if(result.customerInfo.entitlements.active['data_stream_pro'] || result.customerInfo.entitlements.active['PRO']){
+    if(result.customerInfo.entitlements.active['data_stream_sa_pro']){
       await supabaseClient.from('profiles').update({is_pro:true}).eq('id',currentUser.id)
       document.getElementById('proBadge').classList.remove('hidden'); document.getElementById('proBox').classList.add('hidden')
       alert('PRO Unlocked! +20% boost active')
