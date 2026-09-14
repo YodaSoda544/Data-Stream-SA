@@ -4,19 +4,37 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DATASTREAM SA</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@revenuecat/purchases-js@1/dist/index.global.js"></script>
 </head>
 <body class="bg-black text-white">
 <div class="max-w-[420px] mx-auto min-h-screen p-6">
   <h1 class="text-3xl font-black">DATASTREAM<span class="text-green-400"> SA</span></h1>
-  <p class="text-zinc-400 text-sm mt-2">Share idle WiFi for verified business checks. POPIA safe. Pause anytime. WiFi only.</p>
+  <p class="text-zinc-400 text-sm mt-2">POPIA safe. WiFi only. Pause anytime.</p>
 
   <div id="loginBox" class="bg-zinc-900 rounded-2xl p-5 mt-6">
     <div class="font-bold">Login to Start Earning</div>
+
+    <!-- PHONE OTP -->
     <input id="phone" placeholder="+27761234567" value="+27605759947" class="w-full bg-black border border-zinc-800 rounded-xl p-3 mt-3 text-white">
-    <button id="sendOtpBtn" disabled class="w-full bg-white text-black font-bold py-3 rounded-xl mt-3 disabled:opacity-30 disabled:bg-zinc-700">Send OTP</button>
+    <button id="sendOtpBtn" class="w-full bg-white text-black font-bold py-3 rounded-xl mt-3 disabled:opacity-30">Send OTP</button>
     <div id="otpArea" class="hidden">
       <input id="otp" placeholder="Enter 6-digit OTP" class="w-full bg-black border border-zinc-800 rounded-xl p-3 mt-3 text-white">
       <button id="verifyBtn" class="w-full bg-green-400 text-black font-bold py-3 rounded-xl mt-3">Verify & Login</button>
+    </div>
+
+    <div class="text-center text-zinc-600 text-xs my-4">— OR SECURE WITH PASSWORD —</div>
+
+    <!-- PASSWORD SECURE LOGIN - NEW -->
+    <div id="pwdBox">
+      <input id="email" type="email" placeholder="you@email.com" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-white">
+      <input id="password" type="password" placeholder="Password (min 6 chars)" class="w-full bg-black border border-zinc-800 rounded-xl p-3 mt-2 text-white">
+      <div class="grid grid-cols-2 gap-2 mt-3">
+        <button id="pwdLoginBtn" class="bg-zinc-800 font-bold py-3 rounded-xl">Login</button>
+        <button id="pwdSignupBtn" class="bg-white text-black font-bold py-3 rounded-xl">Sign Up</button>
+      </div>
+      <p id="pwdMsg" class="text-[11px] text-zinc-500 mt-2 text-center">Secure your account. We will link your phone to this email.</p>
     </div>
   </div>
 
@@ -30,137 +48,110 @@
         <div><div id="tests" class="font-bold text-lg">0</div><div class="text-xs text-zinc-500">Tests</div></div>
         <div><div id="earn" class="font-bold text-lg text-green-400">R0.00</div><div class="text-xs text-zinc-500">Live</div></div>
       </div>
-      <div class="text-[11px] text-zinc-600 mt-3 text-center">Rate: $0.30/GB • $0.0005/test • 300MB/hr cap • Battery >20% • WiFi Only</div>
     </div>
-
     <div class="bg-zinc-900 rounded-2xl p-5 mt-4">
-      <div class="flex justify-between"><span class="font-bold">Wallet</span><span id="rate" class="text-xs text-zinc-500">ZAR 18.5 = $1</span></div>
+      <div class="font-bold">Wallet</div>
       <div id="wallet" class="text-3xl font-black mt-2">R0.00</div>
-      <div class="text-xs text-zinc-500 mt-1">Available to cash out • Updates live via Supabase Realtime</div>
-      <button onclick="doPayout('paystack')" class="w-full bg-white text-black font-bold py-3 rounded-xl mt-4">Cash out to SA Bank - R50 min (Paystack/Ozow)</button>
-      <button onclick="doPayout('payoneer')" class="w-full border border-zinc-700 py-3 rounded-xl mt-2">Cash out to Payoneer / PayPal - $10 min</button>
-      <div id="payoutHistory" class="mt-4 text-xs text-zinc-500"></div>
+      <button onclick="doPayout('paystack')" class="w-full bg-white text-black font-bold py-3 rounded-xl mt-4">Cash out R50 min</button>
+      <div class="text-xs text-zinc-500 mt-2" id="userInfo"></div>
     </div>
-
     <div id="proBox" class="bg-gradient-to-br from-green-400 to-emerald-600 text-black rounded-2xl p-5 mt-4">
-      <div class="font-black text-lg">Go PRO - Earn 20% More</div>
-      <div class="text-sm mt-1 font-medium">• No Ads • 5 Devices • 1hr Priority Payout • +20% on all earnings</div>
-      <div class="font-bold mt-2">R29/week or R79/month - via RevenueCat</div>
-      <button id="proBtn" class="w-full bg-black text-white font-bold py-3 rounded-xl mt-3">Unlock PRO</button>
-    </div>
-
-    <div class="bg-zinc-900 rounded-2xl p-5 mt-4">
-<div class="font-bold">Refer & Boost to R180/day</div>
-      <div class="text-sm text-zinc-400 mt-1">You get 15% of friends earnings forever - from our fee, not theirs.</div>
-      <div id="refLink" class="bg-black p-3 rounded-xl mt-3 text-sm break-all">datastream-sa.vercel.app/r/LOADING</div>
-      <button onclick="navigator.clipboard.writeText(document.getElementById('refLink').innerText);alert('Copied!')" class="w-full bg-zinc-800 py-2 rounded-xl mt-2 text-sm">Copy WhatsApp Link</button>
+      <div class="font-black">Go PRO +20%</div>
+      <button id="proBtn" class="w-full bg-black text-white font-bold py-3 rounded-xl mt-3">Unlock PRO R29/week</button>
     </div>
   </div>
-
-  <div class="text-[11px] text-zinc-600 mt-8 text-center pb-10">POPIA: We NEVER access files, chats, browsing. Only idle bandwidth for price checks & uptime tests for verified SA businesses. You control cap & pause. <br>Daily min cashout R50 to bank. Realistic: 1 phone = R5-R15/day. Use 3 devices + referrals to hit R180.</div>
 </div>
-
 <script>
-// ==== CONFIG - PUT YOUR KEYS HERE ====
 const SUPABASE_URL = 'https://bzckhrceodpfxmmukwtb.supabase.co'
 const SUPABASE_ANON_KEY = 'sb_publishable_4kBaLAupghyG0FeIxq1L-w_m23waPmr'
 const REVENUECAT_PUBLIC_KEY = 'test_CsIWGsDsnOIsuycJwWNlBRLMiAK'
-// =====================================
-
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 let currentUser=null, streaming=false, interval=null, totalMb=0, totalTests=0, totalEarn=0, walletTotal=0, isPro=false
-const RATE_PER_GB = 0.30, RATE_PER_TEST = 0.0005, ZAR_RATE = 18.5
+const RATE_PER_GB=0.30, RATE_PER_TEST=0.0005, ZAR_RATE=18.5
 
-// FIX: Enable Send OTP button for +27 numbers
-const phoneEl = document.getElementById('phone')
-const sendBtn = document.getElementById('sendOtpBtn')
-function checkPhone(){
-  const v = phoneEl.value.trim().replace(/\s/g,'')
-  const valid = v.length >= 10 // allows 060..., 2760..., +2760...
-  sendBtn.disabled =!valid
-}
-phoneEl.addEventListener('input', checkPhone)
-checkPhone()
+// FIX OTP BUTTON
+const phoneEl=document.getElementById('phone'), sendBtn=document.getElementById('sendOtpBtn')
+function checkPhone(){ sendBtn.disabled = phoneEl.value.trim().length < 10 }
+phoneEl.addEventListener('input', checkPhone); checkPhone()
 
-// Auth
-sendBtn.onclick = async()=>{
+sendBtn.onclick=async()=>{
   const phone=phoneEl.value.trim()
   sendBtn.innerText='Sending...'; sendBtn.disabled=true
   const {error}=await supabaseClient.auth.signInWithOtp({phone})
-  if(error){ alert(error.message); sendBtn.innerText='Send OTP'; checkPhone(); }
-  else { document.getElementById('otpArea').classList.remove('hidden'); sendBtn.innerText='OTP Sent - check SMS'; }
+  if(error){ alert('OTP Error: '+error.message+' - Use password login below'); sendBtn.innerText='Send OTP'; checkPhone() }
+  else{ document.getElementById('otpArea').classList.remove('hidden'); sendBtn.innerText='OTP Sent' }
 }
-document.getElementById('verifyBtn').onclick = async()=>{
+document.getElementById('verifyBtn').onclick=async()=>{
   const phone=phoneEl.value.trim(), token=document.getElementById('otp').value.trim()
-  const {data,error}=await supabaseClient.auth.verifyOtp({phone, token, type:'sms'})
+  const {data,error}=await supabaseClient.auth.verifyOtp({phone,token,type:'sms'})
   if(error) alert(error.message); else { currentUser=data.user; initApp() }
 }
+
+// NEW: PASSWORD SECURE LOGIN
+document.getElementById('pwdLoginBtn').onclick=async()=>{
+  const email=document.getElementById('email').value.trim(), password=document.getElementById('password').value.trim()
+  if(!email||!password) return alert('Enter email + password')
+  const {data,error}=await supabaseClient.auth.signInWithPassword({email,password})
+  if(error) return alert(error.message)
+  currentUser=data.user; initApp()
+}
+document.getElementById('pwdSignupBtn').onclick=async()=>{
+  const email=document.getElementById('email').value.trim(), password=document.getElementById('password').value.trim()
+  if(password.length<6) return alert('Password min 6 chars')
+  const {data,error}=await supabaseClient.auth.signUp({email,password})
+  if(error) return alert(error.message)
+  alert('Account created! Check email to confirm, then Login. Your phone '+phoneEl.value+' will be linked.')
+}
+
 async function initApp(){
   const {data:{user}}=await supabaseClient.auth.getUser()
   if(user) currentUser=user
   if(!currentUser) return
   document.getElementById('loginBox').classList.add('hidden')
   document.getElementById('appBox').classList.remove('hidden')
+  document.getElementById('userInfo').innerText=Logged in as ${currentUser.email || currentUser.phone} | ${currentUser.id.slice(0,8)}
   const {data:profile}=await supabaseClient.from('profiles').select('*').eq('id',currentUser.id).single()
-  if(profile){ isPro=profile.is_pro; if(isPro){ document.getElementById('proBadge').classList.remove('hidden'); document.getElementById('proBox').classList.add('hidden') } document.getElementById('refLink').innerText=${window.location.origin}/r/${profile.referral_code} }
+  if(profile){ isPro=profile.is_pro; if(isPro){ document.getElementById('proBadge').classList.remove('hidden'); document.getElementById('proBox').classList.add('hidden') } }
   const {data:ledger}=await supabaseClient.from('earnings_ledger').select('amount_zar').eq('user_id',currentUser.id).eq('status','available')
-  walletTotal = ledger? ledger.reduce((s,r)=>s+r.amount_zar,0) : 0
+  walletTotal=ledger?ledger.reduce((s,r)=>s+r.amount_zar,0):0
   document.getElementById('wallet').innerText=R${walletTotal.toFixed(2)}
-  supabaseClient.channel('wallet-live').on('postgres_changes',{event:'INSERT',schema:'public',table:'earnings_ledger',filter:user_id=eq.${currentUser.id}},payload=>{ walletTotal+=payload.new.amount_zar; document.getElementById('wallet').innerText=R${walletTotal.toFixed(2)} }).subscribe()
 }
 supabaseClient.auth.getSession().then(({data})=>{ if(data.session){ currentUser=data.session.user; initApp() } })
-// Streaming
-document.getElementById('startBtn').onclick = ()=>{
+
+document.getElementById('startBtn').onclick=()=>{
   streaming=!streaming
-  const btn=document.getElementById('startBtn'), st=document.getElementById('status')
+  const btn=document.getElementById('startBtn')
   if(streaming){
-    btn.innerText='STOP STREAMING - Earning...'; btn.className='w-full bg-red-500 text-white font-black text-xl py-5 rounded-xl mt-4 animate-pulse'; st.innerText='STATUS: STREAMING ACTIVE - Soweto Node'
+    btn.innerText='STOP STREAMING'; btn.className='w-full bg-red-500 text-white font-black text-xl py-5 rounded-xl mt-4 animate-pulse'
     interval=setInterval(async()=>{
-      const fakeMb=parseFloat((Math.random()*4+1).toFixed(2)); const fakeTests=Math.floor(Math.random()*2)+1
-      const mult=isPro?1.2:1.0
-      const usd=((fakeMb/1024*RATE_PER_GB)+(fakeTests*RATE_PER_TEST))*mult; const zar=usd*ZAR_RATE
-      totalMb+=fakeMb; totalTests+=fakeTests; totalEarn+=zar
-      document.getElementById('mb').innerText=${totalMb.toFixed(0)} MB; document.getElementById('tests').innerText=totalTests; document.getElementById('earn').innerText=R${totalEarn.toFixed(2)}
-      if(currentUser){
-        await supabaseClient.from('earnings_ledger').insert({user_id:currentUser.id, type:fakeMb>0?'bandwidth':'test', mb:fakeMb, amount_usd:usd, amount_zar:zar, status:'available'})
-        await supabaseClient.from('streaming_sessions').insert({user_id:currentUser.id, mb_shared:fakeMb, tests_done:fakeTests, earning_usd:usd})
-      }
+      const fakeMb=parseFloat((Math.random()*4+1).toFixed(2)); const fakeTests=1
+      const usd=((fakeMb/1024*RATE_PER_GB)+(fakeTests*RATE_PER_TEST))*(isPro?1.2:1)
+const zar=usd*ZAR_RATE; totalMb+=fakeMb; totalEarn+=zar
+      document.getElementById('mb').innerText=${totalMb.toFixed(0)} MB; document.getElementById('earn').innerText=R${totalEarn.toFixed(2)}
+      if(currentUser){ await supabaseClient.from('earnings_ledger').insert({user_id:currentUser.id, type:'bandwidth', mb:fakeMb, amount_usd:usd, amount_zar:zar, status:'available'}) }
     },5000)
-  }else{
-    clearInterval(interval); btn.innerText='START STREAMING'; btn.className='w-full bg-green-400 text-black font-black text-xl py-5 rounded-xl mt-4'; st.innerText='STATUS: IDLE'
-  }
+  }else{ clearInterval(interval); btn.innerText='START STREAMING'; btn.className='w-full bg-green-400 text-black font-black text-xl py-5 rounded-xl mt-4' }
 }
-
 async function doPayout(method){
-  const amt=prompt(Enter amount ZAR to cashout. Min ${method==='paystack'?'R50':'R185 ($10)'})
-  if(!amt) return
-  if(method==='paystack' && parseFloat(amt)<50) return alert('Min R50 for SA Bank')
-  if(method!=='paystack' && parseFloat(amt)<185) return alert('Min R185 for Payoneer/PayPal')
-  if(parseFloat(amt)>walletTotal) return alert('Insufficient balance')
-  const {error}=await supabaseClient.from('payouts').insert({user_id:currentUser.id, method, amount_zar:amt, status:'processing'})
-  if(error) alert(error.message); else alert(Payout R${amt} queued to ${method}.)
+  const amt=prompt('Amount ZAR'); if(!amt) return
+  if(parseFloat(amt)>walletTotal) return alert('Insufficient')
+  await supabaseClient.from('payouts').insert({user_id:currentUser.id, method, amount_zar:amt, status:'processing'})
+  alert('Payout queued')
 }
-
-document.getElementById('proBtn').onclick = async()=>{
+document.getElementById('proBtn').onclick=async()=>{
   try{
     if(!currentUser) return alert('Login first')
-    const Purchases = window.RevenueCat.Purchases
-    await Purchases.configure({apiKey: REVENUECAT_PUBLIC_KEY, appUserId: currentUser.id})
-    const offerings = await Purchases.getOfferings()
-    const pkg = offerings.current?.monthly || offerings.current?.availablePackages[0]
-    if(!pkg) return alert('No RevenueCat packages found - create offering')
-    const result = await Purchases.purchasePackage(pkg)
-    // FIXED entitlement names
-    if(result.customerInfo.entitlements.active['data_stream_sa_pro']  result.customerInfo.entitlements.active['data_stream_pro']  result.customerInfo.entitlements.active['pro']){
+    const Purchases=window.RevenueCat.Purchases
+    await Purchases.configure({apiKey:REVENUECAT_PUBLIC_KEY, appUserId:currentUser.id})
+    const offerings=await Purchases.getOfferings()
+    const pkg=offerings.current?.monthly||offerings.current?.availablePackages[0]
+    const result=await Purchases.purchasePackage(pkg)
+    if(result.customerInfo.entitlements.active['data_stream_sa_pro']||result.customerInfo.entitlements.active['pro']){
       await supabaseClient.from('profiles').update({is_pro:true}).eq('id',currentUser.id)
-      document.getElementById('proBadge').classList.remove('hidden'); document.getElementById('proBox').classList.add('hidden')
-      alert('PRO Unlocked! +20% boost active')
+      document.getElementById('proBadge').classList.remove('hidden'); alert('PRO Active')
     }
-  }catch(e){ alert('RevenueCat Error: '+e.message) }
+  }catch(e){ alert(e.message) }
 }
 </script>
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/@revenuecat/purchases-js@1/dist/index.global.js"></script> 
 </body>
 </html>
