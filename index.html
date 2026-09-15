@@ -1,192 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DATASTREAM SA</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,Arial}
-body{background:#000;color:#fff}
-.wrap{max-width:420px;margin:0 auto;min-height:100vh;padding:20px}
-.card{background:#18181b;border-radius:16px;padding:18px;margin-top:14px;border:1px solid #27272a}
-input{width:100%;background:#000;border:1px solid #27272a;border-radius:12px;padding:12px;margin-top:8px;color:#fff}
-button{width:100%;border:0;border-radius:12px;padding:14px;margin-top:10px;font-weight:800;cursor:pointer}
-.btn-white{background:#fff;color:#000} .btn-green{background:#4ade80;color:#000}
-.btn-dark{background:#27272a;color:#fff} .btn-red{background:#ef4444;color:#fff}
-.btn-dis{background:#27272a;color:#52525b;cursor:not-allowed}
-.small{font-size:11px;color:#71717a} .hidden{display:none}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;margin-top:12px}
-.badge{display:inline-block;background:#27272a;padding:4px 8px;border-radius:20px;font-size:10px;margin-top:6px}
-.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-.tab-active{background:#fff;color:#000} .tab-inactive{background:#27272a;color:#71717a}
-</style>
-</head>
-<body>
-<div class="wrap">
-<h1 style="font-size:30px;font-weight:900">DATASTREAM<span style="color:#4ade80"> SA</span> <span class="badge" id="capBadge">FREE R5/DAY MAX</span></h1>
-<p class="small">POPIA safe. Speed data only. WiFi only.</p>
-
-<div id="loginBox" class="card">
-<div style="font-weight:700">Login</div>
-<div class="tabs">
-<button id="tabPhone" class="tab-active">Phone OTP</button>
-<button id="tabEmail" class="tab-inactive">Email</button>
-</div>
-
-<div id="phoneBox">
-<input id="phone" placeholder="e.g. +27601234567">
-<button id="sendOtpBtn" class="btn-white">Send OTP</button>
-<div id="otpArea" class="hidden">
-<div class="small" style="margin-top:10px;color:#4ade80">OTP sent! Enter code:</div>
-<input id="otp" placeholder="e.g. 123456" style="border-color:#4ade80">
-<button id="verifyBtn" class="btn-green">Verify OTP & Login</button>
-</div>
-</div>
-
-<div id="emailBox" class="hidden">
-<input id="email" type="email" placeholder="e.g. you@gmail.com">
-<input id="password" type="password" placeholder="e.g. password123">
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button id="pwdLoginBtn" class="btn-dark">Login</button><button id="pwdSignupBtn" class="btn-white">Sign Up</button></div>
-</div>
-
-<button id="skipBtn" class="btn-dark" style="border:1px dashed #52525b">SKIP & TEST APP →</button>
-<div id="debug" class="small" style="margin-top:8px">Ready</div>
-<label class="small" style="display:flex;gap:6px;margin-top:10px"><input type="checkbox" id="popia" style="width:auto"> I consent to POPIA</label>
-</div>
-
-<div id="appBox" class="hidden">
-<div class="card">
-<div id="status" class="small">STATUS: IDLE</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
-<button id="startBtn" class="btn-green" style="font-size:18px;padding:18px">START</button>
-<button id="pauseBtn" class="btn-dark">PAUSE</button>
-</div>
-<div class="grid3">
-<div><div id="mb" style="font-weight:800">0 MB</div><div class="small">Data</div></div>
-<div><div id="tests" style="font-weight:800">0</div><div class="small">Tests</div></div>
-<div><div id="earn" style="font-weight:800;color:#4ade80">R0.00</div><div class="small">Live</div></div>
-</div>
-<div id="fraudMsg" class="small" style="color:#fbbf24;margin-top:8px"></div>
-</div>
-
-<div class="card">
-<div style="display:flex;justify-content:space-between"><div style="font-weight:700">Wallet</div><div class="badge" id="proBadge">FREE</div></div>
-<div id="walletAvail" style="font-size:32px;font-weight:900;margin-top:6px">R0.00 Available</div>
-<div id="walletPend" class="small">R0.00 Pending • R0.00 Today</div>
-<button id="cashoutBtn" class="btn-dis" disabled>Cash out R50 min</button>
-<button id="simulateProBtn" class="btn-dark" style="font-size:11px">Simulate PRO</button>
-<button id="logoutBtn" class="btn-dark">Logout</button>
-<div id="userInfo" class="small"></div>
-</div>
-</div>
-</div>
-
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{background:#000;color:#fff;font-family:system-ui;padding:20px;max-width:400px;margin:auto}input{width:100%;padding:12px;margin:6px 0;border-radius:8px;background:#111;color:#fff;border:1px solid #333}button{width:100%;padding:14px;margin:6px 0;border-radius:8px;font-weight:800} .w{background:#fff;color:#000} .g{background:#4ade80} .d{background:#222;color:#fff}</style>
+</head><body>
+<h2>DATASTREAM TEST LOGIN</h2>
+<p id="debug" style="color:#4ade80">Ready</p>
+<input id="email" placeholder="you@gmail.com">
+<input id="password" type="password" placeholder="password123">
+<button class="w" onclick="doSignup()">Sign Up</button>
+<button class="g" onclick="doLogin()">Login</button>
+<button class="d" onclick="skip()">SKIP → App</button>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// ===== KEYS AT BOTTOM BUT DECLARED EARLY FOR BUTTON FIX =====
-window.SUPABASE_URL = 'https://bzckhrceodpfxmmukwtb.supabase.co';
-window.SUPABASE_ANON_KEY = 'sb_publishable_4kBaLAupghyG0FeIxq1L-w_m23waPmr';
-
-const RATE_FREE = 0.02; const RATE_PRO = 0.024; const MB_PER_TEST = 2;
-const CAP_FREE = 5.00; const CAP_PRO = 9.60; const MIN_CASHOUT = 50; const FEE = 2;
-let supabaseClient=null, currentUser=null, isPro=false;
-let tests=0, mb=0, liveZar=0, walletAvail=0, walletPend=0, todayEarned=0;
-let isStreaming=false, interval=null;
-let deviceId = localStorage.getItem('ds_device') || 'dev_'+Math.random().toString(36).slice(2,9);
-localStorage.setItem('ds_device', deviceId);
-
-function getClient(){ 
-  if(!supabaseClient) supabaseClient=window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY); 
-  return supabaseClient; 
+const SUPABASE_URL='https://bzckhrceodpfxmmukwtb.supabase.co';
+const SUPABASE_KEY='sb_publishable_4kBaLAupghyG0FeIxq1L-w_m23waPmr';
+const supa=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+function log(m){document.getElementById('debug').innerText=m; console.log(m);}
+async function doSignup(){
+  const e=document.getElementById('email').value; const p=document.getElementById('password').value;
+  log('Creating '+e); const {error}=await supa.auth.signUp({email:e,password:p});
+  if(error){log(error.message); alert(error.message);} else {log('Created '+e+' Now click Login'); alert('Created, now Login');}
 }
-function updateUI(){
-  document.getElementById('mb').innerText=mb+' MB';
-  document.getElementById('tests').innerText=tests;
-  document.getElementById('earn').innerText='R'+liveZar.toFixed(2);
-  document.getElementById('walletAvail').innerText='R'+walletAvail.toFixed(2)+' Available';
-  const cap = isPro?CAP_PRO:CAP_FREE;
-  document.getElementById('walletPend').innerText=R${walletPend.toFixed(2)} Pending • R${todayEarned.toFixed(2)} Today (Cap R${cap.toFixed(2)});
-  const cb=document.getElementById('cashoutBtn');
-  if(walletAvail>=MIN_CASHOUT){ cb.disabled=false; cb.className='btn-white'; }
-  else{ cb.disabled=true; cb.className='btn-dis'; }
+async function doLogin(){
+  const e=document.getElementById('email').value; const p=document.getElementById('password').value;
+  log('Logging '+e); const {data,error}=await supa.auth.signInWithPassword({email:e,password:p});
+  if(error){log('FAIL '+error.message); alert(error.message);} else {log('OK '+data.user.email); alert('Logged in!'); location.href='/';}
 }
-function showApp(){ document.getElementById('loginBox').classList.add('hidden'); document.getElementById('appBox').classList.remove('hidden'); }
-function checkFraud(){
-  const msg=document.getElementById('fraudMsg');
-  if(navigator.webdriver){ msg.innerText='⚠️ Emulator'; return false; }
-  const conn=navigator.connection||{}; if(conn.type==='cellular'){ msg.innerText='⚠️ WiFi only'; return false; }
-  msg.innerText='✓ Verified'; return true;
-}
-
-// BUTTONS WIRED IMMEDIATELY - NO DOMContentLoaded
-const debugEl = document.getElementById('debug');
-function log(t){ debugEl.innerText=t; console.log(t); }
-
-document.getElementById('tabPhone').onclick = function(){ 
-  this.className='tab-active'; document.getElementById('tabEmail').className='tab-inactive';
-  document.getElementById('phoneBox').classList.remove('hidden'); document.getElementById('emailBox').classList.add('hidden');
-  log('Phone tab');
-};
-document.getElementById('tabEmail').onclick = function(){ 
-  this.className='tab-active'; document.getElementById('tabPhone').className='tab-inactive';
-  document.getElementById('emailBox').classList.remove('hidden'); document.getElementById('phoneBox').classList.add('hidden');
-  log('Email tab');
-};
-document.getElementById('sendOtpBtn').onclick = async function(){
-  try{ const c=getClient(); const phone=document.getElementById('phone').value.trim(); 
-  if(!phone.startsWith('+')) return alert('Start with + e.g. +2760');
-  log('Sending OTP to '+phone); const {error}=await c.auth.signInWithOtp({phone}); if(error) throw error;
-  document.getElementById('otpArea').classList.remove('hidden'); log('OTP sent to '+phone); }catch(e){ log('OTP error '+e.message); alert(e.message); }
-};
-document.getElementById('verifyBtn').onclick = async function(){
-  try{ const c=getClient(); const phone=document.getElementById('phone').value.trim(); const token=document.getElementById('otp').value.trim();
-log('Verifying '+token); const {data,error}=await c.auth.verifyOtp({phone,token,type:'sms'}); if(error) throw error;
-  currentUser=data.user; log('Logged in '+phone); showApp(); }catch(e){ log(e.message); alert(e.message); }
-};
-document.getElementById('pwdLoginBtn').onclick = async function(){
-  try{ const c=getClient(); const email=document.getElementById('email').value.trim(); const pw=document.getElementById('password').value.trim();
-  log('Login '+email); const {data,error}=await c.auth.signInWithPassword({email,password:pw}); if(error) throw error;
-  currentUser=data.user; log('Logged in '+email); showApp(); updateUI(); }catch(e){ log(e.message); alert(e.message); }
-};
-document.getElementById('pwdSignupBtn').onclick = async function(){
-  try{ const c=getClient(); const email=document.getElementById('email').value.trim(); const pw=document.getElementById('password').value.trim();
-  log('Signup '+email); const {error}=await c.auth.signUp({email,password:pw}); if(error) throw error;
-  log('Created '+email); alert('Created, now Login'); }catch(e){ log(e.message); alert(e.message); }
-};
-document.getElementById('skipBtn').onclick = function(){ log('Skip demo'); showApp(); updateUI(); };
-document.getElementById('logoutBtn').onclick = function(){ location.reload(); };
-
-document.getElementById('startBtn').onclick = function(){
-  if(isStreaming) return; if(!checkFraud()) return alert(document.getElementById('fraudMsg').innerText);
-  isStreaming=true; this.innerText='STREAMING...'; this.className='btn-red';
-  document.getElementById('status').innerText='STREAMING R'+(isPro?RATE_PRO:RATE_FREE)+'/test';
-  interval=setInterval(async()=>{
-    const cap=isPro?CAP_PRO:CAP_FREE; if(todayEarned>=cap){ document.getElementById('status').innerText='CAP R'+cap+' REACHED'; clearInterval(interval); isStreaming=false; return; }
-    const rate=isPro?RATE_PRO:RATE_FREE; tests++; mb+=MB_PER_TEST; liveZar+=rate; updateUI();
-    if(currentUser){ try{ await getClient().from('earnings_ledger').insert({user_id:currentUser.id, type:'bandwidth', mb:MB_PER_TEST, amount_zar:rate, status:'pending'}); }catch{} }
-  },3000);
-};
-document.getElementById('pauseBtn').onclick = function(){
-  if(!isStreaming) return; clearInterval(interval); isStreaming=false;
-  walletPend+=liveZar; todayEarned+=liveZar; walletAvail+=liveZar*0.5; walletPend-=liveZar*0.5;
-  if(!currentUser){ walletAvail+=walletPend; walletPend=0; }
-  liveZar=0; document.getElementById('startBtn').innerText='RESUME'; document.getElementById('startBtn').className='btn-green';
-  document.getElementById('status').innerText='PAUSED - Saved'; updateUI();
-};
-document.getElementById('simulateProBtn').onclick = function(){
-  isPro=!isPro; document.getElementById('proBadge').innerText=isPro?'PRO':'FREE';
-  document.getElementById('capBadge').innerText=isPro?'PRO R9.60/DAY MAX':'FREE R5/DAY MAX';
-  updateUI(); log(isPro?'PRO on':'FREE on');
-};
-document.getElementById('cashoutBtn').onclick = async function(){
-  if(walletAvail<50) return alert('Need R50');
-  const m=prompt('Method?','capitec'); const a=parseFloat(prompt('Amount? R'+walletAvail, walletAvail));
-  if(a>=50){ if(currentUser){ try{ await getClient().from('payouts').insert({user_id:currentUser.id, method:m, amount_zar:a, status:'pending'});}catch{} } walletAvail-=a; updateUI(); alert('Queued R'+a); }
-};
-
-log('Buttons armed - Ready');
-updateUI();
-setInterval(checkFraud,3000);
+function skip(){log('Demo mode'); alert('Demo - we will add full app after login works');}
+log('Buttons armed - type email and click');
 </script>
-</body>
-</html>
+</body></html>
