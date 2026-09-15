@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DATASTREAM SA</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/@revenuecat/purchases-js@1/dist/index.global.js"></script>
 </head>
 <body class="bg-black text-white">
 <div class="max-w-[420px] mx-auto min-h-screen p-6">
@@ -15,26 +13,18 @@
 
   <div id="loginBox" class="bg-zinc-900 rounded-2xl p-5 mt-6">
     <div class="font-bold">Login to Start Earning</div>
-
-    <!-- PHONE OTP -->
     <input id="phone" placeholder="+27761234567" value="+27605759947" class="w-full bg-black border border-zinc-800 rounded-xl p-3 mt-3 text-white">
-    <button id="sendOtpBtn" class="w-full bg-white text-black font-bold py-3 rounded-xl mt-3 disabled:opacity-30">Send OTP</button>
+    <button id="sendOtpBtn" class="w-full bg-white text-black font-bold py-3 rounded-xl mt-3">Send OTP</button>
     <div id="otpArea" class="hidden">
       <input id="otp" placeholder="Enter 6-digit OTP" class="w-full bg-black border border-zinc-800 rounded-xl p-3 mt-3 text-white">
       <button id="verifyBtn" class="w-full bg-green-400 text-black font-bold py-3 rounded-xl mt-3">Verify & Login</button>
     </div>
-
     <div class="text-center text-zinc-600 text-xs my-4">— OR SECURE WITH PASSWORD —</div>
-
-    <!-- PASSWORD SECURE LOGIN - NEW -->
-    <div id="pwdBox">
-      <input id="email" type="email" placeholder="you@email.com" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-white">
-      <input id="password" type="password" placeholder="Password (min 6 chars)" class="w-full bg-black border border-zinc-800 rounded-xl p-3 mt-2 text-white">
-      <div class="grid grid-cols-2 gap-2 mt-3">
-        <button id="pwdLoginBtn" class="bg-zinc-800 font-bold py-3 rounded-xl">Login</button>
-        <button id="pwdSignupBtn" class="bg-white text-black font-bold py-3 rounded-xl">Sign Up</button>
-      </div>
-      <p id="pwdMsg" class="text-[11px] text-zinc-500 mt-2 text-center">Secure your account. We will link your phone to this email.</p>
+    <input id="email" type="email" placeholder="you@email.com" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-white">
+    <input id="password" type="password" placeholder="Password (min 6 chars)" class="w-full bg-black border border-zinc-800 rounded-xl p-3 mt-2 text-white">
+    <div class="grid grid-cols-2 gap-2 mt-3">
+      <button id="pwdLoginBtn" class="bg-zinc-800 font-bold py-3 rounded-xl">Login</button>
+      <button id="pwdSignupBtn" class="bg-white text-black font-bold py-3 rounded-xl">Sign Up</button>
     </div>
   </div>
 
@@ -61,76 +51,81 @@
     </div>
   </div>
 </div>
+
+<!-- SMOOTH FLOW: Libs at bottom -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@revenuecat/purchases-js@1/dist/index.global.js"></script>
+
 <script>
-const SUPABASE_URL = 'https://bzckhrceodpfxmmukwtb.supabase.co'
-const SUPABASE_ANON_KEY = 'sb_publishable_4kBaLAupghyG0FeIxq1L-w_m23waPmr'
-const REVENUECAT_PUBLIC_KEY = 'test_CsIWGsDsnOIsuycJwWNlBRLMiAK'
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-let currentUser=null, streaming=false, interval=null, totalMb=0, totalTests=0, totalEarn=0, walletTotal=0, isPro=false
+let supabaseClient=null, currentUser=null, streaming=false, interval=null, totalMb=0, totalEarn=0, walletTotal=0, isPro=false
 const RATE_PER_GB=0.30, RATE_PER_TEST=0.0005, ZAR_RATE=18.5
 
-// FIX OTP BUTTON
-const phoneEl=document.getElementById('phone'), sendBtn=document.getElementById('sendOtpBtn')
-function checkPhone(){ sendBtn.disabled = phoneEl.value.trim().length < 10 }
-phoneEl.addEventListener('input', checkPhone); checkPhone()
-
-sendBtn.onclick=async()=>{
-  const phone=phoneEl.value.trim()
-  sendBtn.innerText='Sending...'; sendBtn.disabled=true
-  const {error}=await supabaseClient.auth.signInWithOtp({phone})
-  if(error){ alert('OTP Error: '+error.message+' - Use password login below'); sendBtn.innerText='Send OTP'; checkPhone() }
-  else{ document.getElementById('otpArea').classList.remove('hidden'); sendBtn.innerText='OTP Sent' }
-}
-document.getElementById('verifyBtn').onclick=async()=>{
-  const phone=phoneEl.value.trim(), token=document.getElementById('otp').value.trim()
-  const {data,error}=await supabaseClient.auth.verifyOtp({phone,token,type:'sms'})
-  if(error) alert(error.message); else { currentUser=data.user; initApp() }
-}
-
-// NEW: PASSWORD SECURE LOGIN
-document.getElementById('pwdLoginBtn').onclick=async()=>{
-  const email=document.getElementById('email').value.trim(), password=document.getElementById('password').value.trim()
-  if(!email||!password) return alert('Enter email + password')
-  const {data,error}=await supabaseClient.auth.signInWithPassword({email,password})
-  if(error) return alert(error.message)
-  currentUser=data.user; initApp()
-}
-document.getElementById('pwdSignupBtn').onclick=async()=>{
-  const email=document.getElementById('email').value.trim(), password=document.getElementById('password').value.trim()
-  if(password.length<6) return alert('Password min 6 chars')
-  const {data,error}=await supabaseClient.auth.signUp({email,password})
-  if(error) return alert(error.message)
-  alert('Account created! Check email to confirm, then Login. Your phone '+phoneEl.value+' will be linked.')
+function initHandlers(){
+// FIX: Buttons now always clickable
+  document.getElementById('sendOtpBtn').onclick=async()=>{
+    const phone=document.getElementById('phone').value.trim()
+    if(!supabaseClient) return alert('Supabase not ready - check keys at bottom')
+    const btn=document.getElementById('sendOtpBtn'); btn.innerText='Sending...'; btn.disabled=true
+    const {error}=await supabaseClient.auth.signInWithOtp({phone})
+    if(error){ alert('OTP: '+error.message+' - Use password login'); btn.innerText='Send OTP'; btn.disabled=false }
+    else{ document.getElementById('otpArea').classList.remove('hidden'); btn.innerText='OTP Sent' }
+  }
+  document.getElementById('verifyBtn').onclick=async()=>{
+    const phone=document.getElementById('phone').value.trim(), token=document.getElementById('otp').value.trim()
+    const {data,error}=await supabaseClient.auth.verifyOtp({phone,token,type:'sms'})
+    if(error) alert(error.message); else { currentUser=data.user; initApp() }
+  }
+  document.getElementById('pwdLoginBtn').onclick=async()=>{
+    const email=document.getElementById('email').value.trim(), password=document.getElementById('password').value.trim()
+    const {data,error}=await supabaseClient.auth.signInWithPassword({email,password})
+    if(error) alert(error.message); else { currentUser=data.user; initApp() }
+  }
+  document.getElementById('pwdSignupBtn').onclick=async()=>{
+    const email=document.getElementById('email').value.trim(), password=document.getElementById('password').value.trim()
+    const {data,error}=await supabaseClient.auth.signUp({email,password})
+    if(error) alert(error.message); else alert('Account created! Confirm email then Login')
+  }
+  document.getElementById('startBtn').onclick=()=>{
+    streaming=!streaming; const btn=document.getElementById('startBtn')
+    if(streaming){
+      btn.innerText='STOP STREAMING'; btn.className='w-full bg-red-500 text-white font-black text-xl py-5 rounded-xl mt-4 animate-pulse'
+      interval=setInterval(async()=>{
+        const fakeMb=parseFloat((Math.random()*4+1).toFixed(2))
+        const usd=((fakeMb/1024*RATE_PER_GB)+(1*RATE_PER_TEST))*(isPro?1.2:1); const zar=usd*ZAR_RATE
+        totalMb+=fakeMb; totalEarn+=zar
+        document.getElementById('mb').innerText=${totalMb.toFixed(0)} MB; document.getElementById('earn').innerText=R${totalEarn.toFixed(2)}
+        if(currentUser) await supabaseClient.from('earnings_ledger').insert({user_id:currentUser.id, type:'bandwidth', mb:fakeMb, amount_usd:usd, amount_zar:zar, status:'available'})
+      },5000)
+    }else{ clearInterval(interval); btn.innerText='START STREAMING'; btn.className='w-full bg-green-400 text-black font-black text-xl py-5 rounded-xl mt-4' }
+  }
+  document.getElementById('proBtn').onclick=async()=>{
+    try{
+      if(!currentUser) return alert('Login first')
+      const Purchases=window.RevenueCat.Purchases
+      await Purchases.configure({apiKey:REVENUECAT_PUBLIC_KEY, appUserId:currentUser.id})
+      const offerings=await Purchases.getOfferings()
+      const pkg=offerings.current?.monthly||offerings.current?.availablePackages[0]
+      const result=await Purchases.purchasePackage(pkg)
+      if(result.customerInfo.entitlements.active['data_stream_sa_pro']||result.customerInfo.entitlements.active['pro']){
+        await supabaseClient.from('profiles').update({is_pro:true}).eq('id',currentUser.id)
+        document.getElementById('proBadge').classList.remove('hidden'); alert('PRO Active')
+      }
+    }catch(e){ alert(e.message) }
+  }
 }
 
 async function initApp(){
+  if(!supabaseClient) return
   const {data:{user}}=await supabaseClient.auth.getUser()
-  if(user) currentUser=user
-  if(!currentUser) return
+  if(user) currentUser=user; if(!currentUser) return
   document.getElementById('loginBox').classList.add('hidden')
   document.getElementById('appBox').classList.remove('hidden')
-  document.getElementById('userInfo').innerText=Logged in as ${currentUser.email || currentUser.phone} | ${currentUser.id.slice(0,8)}
-  const {data:profile}=await supabaseClient.from('profiles').select('*').eq('id',currentUser.id).single()
-  if(profile){ isPro=profile.is_pro; if(isPro){ document.getElementById('proBadge').classList.remove('hidden'); document.getElementById('proBox').classList.add('hidden') } }
+  document.getElementById('userInfo').innerText=Logged in as ${currentUser.email||currentUser.phone}
+const {data:profile}=await supabaseClient.from('profiles').select('*').eq('id',currentUser.id).single()
+  if(profile && profile.is_pro){ isPro=true; document.getElementById('proBadge').classList.remove('hidden') }
   const {data:ledger}=await supabaseClient.from('earnings_ledger').select('amount_zar').eq('user_id',currentUser.id).eq('status','available')
   walletTotal=ledger?ledger.reduce((s,r)=>s+r.amount_zar,0):0
   document.getElementById('wallet').innerText=R${walletTotal.toFixed(2)}
-}
-supabaseClient.auth.getSession().then(({data})=>{ if(data.session){ currentUser=data.session.user; initApp() } })
-
-document.getElementById('startBtn').onclick=()=>{
-  streaming=!streaming
-  const btn=document.getElementById('startBtn')
-  if(streaming){
-    btn.innerText='STOP STREAMING'; btn.className='w-full bg-red-500 text-white font-black text-xl py-5 rounded-xl mt-4 animate-pulse'
-    interval=setInterval(async()=>{
-      const fakeMb=parseFloat((Math.random()*4+1).toFixed(2)); const fakeTests=1
-      const usd=((fakeMb/1024*RATE_PER_GB)+(fakeTests*RATE_PER_TEST))*(isPro?1.2:1)
-const zar=usd*ZAR_RATE; totalMb+=fakeMb; totalEarn+=zar
-      document.getElementById('mb').innerText=${totalMb.toFixed(0)} MB; document.getElementById('earn').innerText=R${totalEarn.toFixed(2)}
-      if(currentUser){ await supabaseClient.from('earnings_ledger').insert({user_id:currentUser.id, type:'bandwidth', mb:fakeMb, amount_usd:usd, amount_zar:zar, status:'available'}) }
-    },5000)
-  }else{ clearInterval(interval); btn.innerText='START STREAMING'; btn.className='w-full bg-green-400 text-black font-black text-xl py-5 rounded-xl mt-4' }
 }
 async function doPayout(method){
   const amt=prompt('Amount ZAR'); if(!amt) return
@@ -138,20 +133,20 @@ async function doPayout(method){
   await supabaseClient.from('payouts').insert({user_id:currentUser.id, method, amount_zar:amt, status:'processing'})
   alert('Payout queued')
 }
-document.getElementById('proBtn').onclick=async()=>{
-  try{
-    if(!currentUser) return alert('Login first')
-    const Purchases=window.RevenueCat.Purchases
-    await Purchases.configure({apiKey:REVENUECAT_PUBLIC_KEY, appUserId:currentUser.id})
-    const offerings=await Purchases.getOfferings()
-    const pkg=offerings.current?.monthly||offerings.current?.availablePackages[0]
-    const result=await Purchases.purchasePackage(pkg)
-    if(result.customerInfo.entitlements.active['data_stream_sa_pro']||result.customerInfo.entitlements.active['pro']){
-      await supabaseClient.from('profiles').update({is_pro:true}).eq('id',currentUser.id)
-      document.getElementById('proBadge').classList.remove('hidden'); alert('PRO Active')
-    }
-  }catch(e){ alert(e.message) }
-}
+
+// ===== KEYS AT THE BOTTOM - FOR SMOOTH FLOW =====
+const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co' // <-- REPLACE ME
+const SUPABASE_ANON_KEY = 'eyJhbGciOi...YOUR_ANON_KEY' // <-- REPLACE ME
+const REVENUECAT_PUBLIC_KEY = 'rcb_YOUR_REVENUECAT_KEY' // <-- REPLACE ME
+
+// Init after keys are defined
+try{
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  initHandlers()
+  supabaseClient.auth.getSession().then(({data})=>{ if(data.session){ currentUser=data.session.user; initApp() } })
+  console.log('DATASTREAM SA ready - keys loaded at bottom')
+}catch(e){ console.error('Key error:', e); alert('Check Supabase keys at bottom of file - '+e.message) }
+// ================================================
 </script>
 </body>
 </html>
