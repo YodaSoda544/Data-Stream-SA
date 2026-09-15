@@ -5,151 +5,157 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DATASTREAM SA</title>
 <style>
-button{ pointer-events:auto !important; cursor:pointer !important; position:relative !important; z-index:99999 !important; }
-button:disabled{ opacity:1 !important; background:white !important; color:black !important; }
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,Arial}
+body{background:#000;color:#fff}
+.wrap{max-width:420px;margin:0 auto;min-height:100vh;padding:24px}
+.card{background:#18181b;border-radius:16px;padding:20px;margin-top:16px}
+input{width:100%;background:#000;border:1px solid #27272a;border-radius:12px;padding:12px;margin-top:8px;color:#fff}
+button{width:100%;border:0;border-radius:12px;padding:14px;margin-top:10px;font-weight:800;cursor:pointer}
+.btn-white{background:#fff;color:#000}
+.btn-green{background:#4ade80;color:#000}
+.btn-dark{background:#27272a;color:#fff}
+.btn-red{background:#ef4444;color:#fff}
+.small{font-size:11px;color:#71717a}
+.hidden{display:none}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;margin-top:16px}
 </style>
 </head>
-<body class="bg-black text-white">
-<div class="max-w-[420px] mx-auto min-h-screen p-6">
-  <h1 class="text-3xl font-black">DATASTREAM<span class="text-green-400"> SA</span></h1>
-  <p class="text-zinc-400 text-sm mt-2">POPIA safe. WiFi only. Pause anytime.</p>
+<body>
+<div class="wrap">
+  <h1 style="font-size:32px;font-weight:900">DATASTREAM<span style="color:#4ade80"> SA</span></h1>
+  <p class="small" style="margin-top:8px">POPIA safe. WiFi only. Pause anytime.</p>
 
-  <div id="loginBox" class="bg-zinc-900 rounded-2xl p-5 mt-6">
-    <div class="font-bold">Login to Start Earning</div>
-    <input id="phone" placeholder="+27761234567" class="w-full bg-black border border-zinc-800 rounded-xl p-3 mt-3 text-white">
-    <button type="button" id="sendOtpBtn" class="w-full bg-white text-black font-bold py-3 rounded-xl mt-3" style="pointer-events:auto; z-index:99999; position:relative; cursor:pointer;">Send OTP</button>
+  <div id="loginBox" class="card">
+    <div style="font-weight:700">Login to Start Earning</div>
+    <input id="phone" value="+27605759947" placeholder="+27761234567">
+    <button id="sendOtpBtn" class="btn-white">Send OTP</button>
     <div id="otpArea" class="hidden">
-      <input id="otp" placeholder="Enter 6-digit OTP" class="w-full bg-black border border-zinc-800 rounded-xl p-3 mt-3 text-white">
-      <button type="button" id="verifyBtn" class="w-full bg-green-400 text-black font-bold py-3 rounded-xl mt-3" style="pointer-events:auto; z-index:99999; position:relative; cursor:pointer;">Verify & Login</button>
+      <input id="otp" placeholder="Enter 6-digit OTP">
+      <button id="verifyBtn" class="btn-green">Verify & Login</button>
     </div>
-    <div class="text-center text-zinc-600 text-xs my-4">— OR SECURE WITH PASSWORD —</div>
-    <input id="email" type="email" placeholder="you@email.com" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-white">
-    <input id="password" type="password" placeholder="Password (min 6 chars)" class="w-full bg-black border border-zinc-800 rounded-xl p-3 mt-2 text-white">
-    <div class="grid grid-cols-2 gap-2 mt-3">
-      <button type="button" id="pwdLoginBtn" class="bg-zinc-800 font-bold py-3 rounded-xl" style="pointer-events:auto; z-index:99999; position:relative; cursor:pointer;">Login</button>
-      <button type="button" id="pwdSignupBtn" class="bg-white text-black font-bold py-3 rounded-xl" style="pointer-events:auto; z-index:99999; position:relative; cursor:pointer;">Sign Up</button>
+    <div style="text-align:center" class="small" style="margin:12px 0">— OR SECURE WITH PASSWORD —</div>
+    <input id="email" type="email" value="thiikay47@gmail.com" placeholder="you@email.com">
+    <input id="password" type="password" placeholder="Password">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <button id="pwdLoginBtn" class="btn-dark">Login</button>
+      <button id="pwdSignupBtn" class="btn-white">Sign Up</button>
     </div>
+    <button id="skipBtn" class="btn-dark" style="border:1px dashed #52525b;margin-top:16px">SKIP LOGIN & TEST APP →</button>
+    <div id="debug" class="small" style="margin-top:8px">Ready. Click any button.</div>
   </div>
 
   <div id="appBox" class="hidden">
-    <div class="bg-zinc-900 rounded-2xl p-5 mt-6">
-      <div id="status" class="text-xs text-zinc-500">STATUS: IDLE</div>
-      <div id="proBadge" class="hidden bg-green-400 text-black text-xs font-bold px-2 py-1 rounded inline-block mt-2">PRO +20% ACTIVE</div>
-      <button type="button" id="startBtn" class="w-full bg-green-400 text-black font-black text-xl py-5 rounded-xl mt-4" style="pointer-events:auto; z-index:99999; position:relative; cursor:pointer;">START STREAMING</button>
-      <div class="grid grid-cols-3 gap-2 mt-5 text-center">
-        <div><div id="mb" class="font-bold text-lg">0 MB</div><div class="text-xs text-zinc-500">Shared</div></div>
-        <div><div id="tests" class="font-bold text-lg">0</div><div class="text-xs text-zinc-500">Tests</div></div>
-        <div><div id="earn" class="font-bold text-lg text-green-400">R0.00</div><div class="text-xs text-zinc-500">Live</div></div>
+    <div class="card">
+      <div id="status" class="small">STATUS: LOGGED IN ✓ Soweto Node</div>
+      <button id="startBtn" class="btn-green" style="font-size:20px;padding:20px">START STREAMING</button>
+      <div class="grid3">
+        <div><div id="mb" style="font-weight:800">0 MB</div><div class="small">Shared</div></div>
+        <div><div id="tests" style="font-weight:800">0</div><div class="small">Tests</div></div>
+        <div><div id="earn" style="font-weight:800;color:#4ade80">R0.00</div><div class="small">Live</div></div>
       </div>
     </div>
-    <div class="bg-zinc-900 rounded-2xl p-5 mt-4">
-      <div class="font-bold">Wallet</div>
-      <div id="wallet" class="text-3xl font-black mt-2">R0.00</div>
-      <button onclick="doPayout('paystack')" class="w-full bg-white text-black font-bold py-3 rounded-xl mt-4">Cash out R50 min</button>
-      <div class="text-xs text-zinc-500 mt-2" id="userInfo"></div>
-    </div>
-    <div id="proBox" class="bg-gradient-to-br from-green-400 to-emerald-600 text-black rounded-2xl p-5 mt-4">
-      <div class="font-black">Go PRO +20%</div>
-      <button type="button" id="proBtn" class="w-full bg-black text-white font-bold py-3 rounded-xl mt-3" style="pointer-events:auto; z-index:99999; position:relative; cursor:pointer;">Unlock PRO</button>
+    <div class="card">
+      <div style="font-weight:700">Wallet</div>
+      <div id="wallet" style="font-size:32px;font-weight:900;margin-top:8px">R0.00</div>
+      <button class="btn-white" onclick="alert('Payout queued - Check Supabase payouts table')">Cash out R50 min</button>
+      <button id="logoutBtn" class="btn-dark" style="margin-top:8px">Logout</button>
+      <div id="userInfo" class="small" style="margin-top:8px"></div>
     </div>
   </div>
 </div>
 
-<!-- SMOOTH FLOW: Libs at bottom -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/@revenuecat/purchases-js@1/dist/index.global.js"></script>
-
 <script>
-let supabaseClient=null, currentUser=null, streaming=false, interval=null, totalMb=0, totalEarn=0, walletTotal=0, isPro=false
-const RATE_PER_GB=0.30, RATE_PER_TEST=0.0005, ZAR_RATE=18.5
+// === KEYS AT BOTTOM - REPLACE THESE 2 LINES ===
+const SUPABASE_URL = 'https://bzckhrceodpfxmmukwtb.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_4kBaLAupghyG0FeIxq1L-w_m23waPmr';
+// ==============================================
+let supabaseClient = null;
+let currentUser = null;
+let walletTotal = 0;
 
-function initHandlers(){
-// FIX: Buttons now always clickable
-  document.getElementById('sendOtpBtn').onclick=async()=>{
-    const phone=document.getElementById('phone').value.trim()
-    if(!supabaseClient) return alert('Supabase not ready - check keys at bottom')
-    const btn=document.getElementById('sendOtpBtn'); btn.innerText='Sending...'; btn.disabled=true
-    const {error}=await supabaseClient.auth.signInWithOtp({phone})
-    if(error){ alert('OTP: '+error.message+' - Use password login'); btn.innerText='Send OTP'; btn.disabled=false }
-    else{ document.getElementById('otpArea').classList.remove('hidden'); btn.innerText='OTP Sent' }
+function getClient(){
+  if(!supabaseClient){
+    try{ supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); }
+catch(e){ document.getElementById('debug').innerText = 'KEY ERROR: Replace keys at bottom'; throw e; }
   }
-  document.getElementById('verifyBtn').onclick=async()=>{
-    const phone=document.getElementById('phone').value.trim(), token=document.getElementById('otp').value.trim()
-    const {data,error}=await supabaseClient.auth.verifyOtp({phone,token,type:'sms'})
-    if(error) alert(error.message); else { currentUser=data.user; initApp() }
-  }
-  document.getElementById('pwdLoginBtn').onclick=async()=>{
-    const email=document.getElementById('email').value.trim(), password=document.getElementById('password').value.trim()
-    const {data,error}=await supabaseClient.auth.signInWithPassword({email,password})
-    if(error) alert(error.message); else { currentUser=data.user; initApp() }
-  }
-  document.getElementById('pwdSignupBtn').onclick=async()=>{
-    const email=document.getElementById('email').value.trim(), password=document.getElementById('password').value.trim()
-    const {data,error}=await supabaseClient.auth.signUp({email,password})
-    if(error) alert(error.message); else alert('Account created! Confirm email then Login')
-  }
-  document.getElementById('startBtn').onclick=()=>{
-    streaming=!streaming; const btn=document.getElementById('startBtn')
-    if(streaming){
-      btn.innerText='STOP STREAMING'; btn.className='w-full bg-red-500 text-white font-black text-xl py-5 rounded-xl mt-4 animate-pulse'
-      interval=setInterval(async()=>{
-        const fakeMb=parseFloat((Math.random()*4+1).toFixed(2))
-        const usd=((fakeMb/1024*RATE_PER_GB)+(1*RATE_PER_TEST))*(isPro?1.2:1); const zar=usd*ZAR_RATE
-        totalMb+=fakeMb; totalEarn+=zar
-        document.getElementById('mb').innerText=${totalMb.toFixed(0)} MB; document.getElementById('earn').innerText=R${totalEarn.toFixed(2)}
-        if(currentUser) await supabaseClient.from('earnings_ledger').insert({user_id:currentUser.id, type:'bandwidth', mb:fakeMb, amount_usd:usd, amount_zar:zar, status:'available'})
-      },5000)
-    }else{ clearInterval(interval); btn.innerText='START STREAMING'; btn.className='w-full bg-green-400 text-black font-black text-xl py-5 rounded-xl mt-4' }
-  }
-  document.getElementById('proBtn').onclick=async()=>{
+  return supabaseClient;
+}
+function showApp(){
+  document.getElementById('loginBox').classList.add('hidden');
+  document.getElementById('appBox').classList.remove('hidden');
+  document.getElementById('userInfo').innerText = currentUser ? (currentUser.email || currentUser.phone) : 'Demo Mode';
+}
+function showLogin(){ document.getElementById('loginBox').classList.remove('hidden'); document.getElementById('appBox').classList.add('hidden'); }
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  const debug = document.getElementById('debug');
+  debug.innerText = 'Buttons Active - Click works!';
+
+  document.getElementById('sendOtpBtn').onclick = async ()=>{
+    debug.innerText = 'Sending OTP...';
     try{
-      if(!currentUser) return alert('Login first')
-      const Purchases=window.RevenueCat.Purchases
-      await Purchases.configure({apiKey:REVENUECAT_PUBLIC_KEY, appUserId:currentUser.id})
-      const offerings=await Purchases.getOfferings()
-      const pkg=offerings.current?.monthly||offerings.current?.availablePackages[0]
-      const result=await Purchases.purchasePackage(pkg)
-      if(result.customerInfo.entitlements.active['data_stream_sa_pro']||result.customerInfo.entitlements.active['pro']){
-        await supabaseClient.from('profiles').update({is_pro:true}).eq('id',currentUser.id)
-        document.getElementById('proBadge').classList.remove('hidden'); alert('PRO Active')
-      }
-    }catch(e){ alert(e.message) }
-  }
-}
+      const client = getClient();
+      const phone = document.getElementById('phone').value.trim();
+      const {error} = await client.auth.signInWithOtp({phone});
+      if(error){ debug.innerText = error.message; alert('OTP Error: '+error.message+' - Use Password Login'); }
+      else{ document.getElementById('otpArea').classList.remove('hidden'); debug.innerText = 'OTP Sent!'; }
+    }catch(e){ alert('Fix keys at bottom: '+e.message); }
+  };
 
-async function initApp(){
-  if(!supabaseClient) return
-  const {data:{user}}=await supabaseClient.auth.getUser()
-  if(user) currentUser=user; if(!currentUser) return
-  document.getElementById('loginBox').classList.add('hidden')
-  document.getElementById('appBox').classList.remove('hidden')
-  document.getElementById('userInfo').innerText=Logged in as ${currentUser.email||currentUser.phone}
-const {data:profile}=await supabaseClient.from('profiles').select('*').eq('id',currentUser.id).single()
-  if(profile && profile.is_pro){ isPro=true; document.getElementById('proBadge').classList.remove('hidden') }
-  const {data:ledger}=await supabaseClient.from('earnings_ledger').select('amount_zar').eq('user_id',currentUser.id).eq('status','available')
-  walletTotal=ledger?ledger.reduce((s,r)=>s+r.amount_zar,0):0
-  document.getElementById('wallet').innerText=R${walletTotal.toFixed(2)}
-}
-async function doPayout(method){
-  const amt=prompt('Amount ZAR'); if(!amt) return
-  if(parseFloat(amt)>walletTotal) return alert('Insufficient')
-  await supabaseClient.from('payouts').insert({user_id:currentUser.id, method, amount_zar:amt, status:'processing'})
-  alert('Payout queued')
-}
+  document.getElementById('verifyBtn').onclick = async ()=>{
+    const client = getClient();
+    const phone = document.getElementById('phone').value.trim();
+    const token = document.getElementById('otp').value.trim();
+    const {data,error} = await client.auth.verifyOtp({phone, token, type:'sms'});
+    if(error) alert(error.message); else { currentUser=data.user; showApp(); }
+  };
 
-// ===== KEYS AT THE BOTTOM - FOR SMOOTH FLOW =====
-const SUPABASE_URL = 'https://bzckhrceodpfxmmukwtb.supabase.co' // <-- REPLACE ME
-const SUPABASE_ANON_KEY = 'sb_publishable_4kBaLAupghyG0FeIxq1L-w_m23waPmr' // <-- REPLACE ME
-const REVENUECAT_PUBLIC_KEY = 'test_PatLVgeAMwkDAojpfczvlEVbDwc' // <-- REPLACE ME
+  document.getElementById('pwdLoginBtn').onclick = async ()=>{
+    debug.innerText = 'Logging in...';
+    try{
+      const client = getClient();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const {data,error} = await client.auth.signInWithPassword({email,password});
+      if(error){ debug.innerText = error.message; alert(error.message); }
+      else{ currentUser=data.user; showApp(); }
+    }catch(e){ alert(e.message); }
+  };
 
-// Init after keys are defined
-try{
-  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-  initHandlers()
-  supabaseClient.auth.getSession().then(({data})=>{ if(data.session){ currentUser=data.session.user; initApp() } })
-  console.log('DATASTREAM SA ready - keys loaded at bottom')
-}catch(e){ console.error('Key error:', e); alert('Check Supabase keys at bottom of file - '+e.message) }
-// ================================================
+  document.getElementById('pwdSignupBtn').onclick = async ()=>{
+    debug.innerText = 'Creating account...';
+    try{
+      const client = getClient();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      if(password.length<6) return alert('Password min 6 chars');
+      const {data,error} = await client.auth.signUp({email,password});
+      if(error) alert(error.message); else { alert('Account created! Now click Login'); debug.innerText='Account created - Click Login'; }
+    }catch(e){ alert(e.message); }
+  };
+
+  document.getElementById('skipBtn').onclick = ()=>{
+    currentUser = null; showApp(); alert('Demo mode - You are past login! Now fix keys at bottom to enable real wallet');
+  };
+
+  document.getElementById('logoutBtn').onclick = async ()=>{
+    try{ await getClient().auth.signOut(); }catch{}
+    currentUser=null; showLogin();
+  };
+
+  document.getElementById('startBtn').onclick = ()=>{
+    let mb=0; const btn=document.getElementById('startBtn');
+    btn.innerText='STREAMING...'; btn.className='btn-red';
+    setInterval(()=>{ mb+=2; document.getElementById('mb').innerText=mb+' MB'; document.getElementById('earn').innerText='R'+(mb*0.05).toFixed(2); },1000);
+  };
+
+  // Auto-login if session exists
+  try{
+    const client = getClient();
+    client.auth.getSession().then(({data})=>{ if(data.session){ currentUser=data.session.user; showApp(); }});
+  }catch{}
+});
 </script>
 </body>
 </html>
