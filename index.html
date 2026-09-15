@@ -4,7 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DATASTREAM SA</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<style>
+button{ pointer-events:auto !important; cursor:pointer !important; position:relative !important; z-index:99999 !important; }
+button:disabled{ opacity:1 !important; background:white !important; color:black !important; }
+</style>
 </head>
 <body class="bg-black text-white">
 <div class="max-w-[420px] mx-auto min-h-screen p-6">
@@ -13,18 +16,18 @@
 
   <div id="loginBox" class="bg-zinc-900 rounded-2xl p-5 mt-6">
     <div class="font-bold">Login to Start Earning</div>
-    <input id="phone" placeholder="+27761234567" value="+27605759947" class="w-full bg-black border border-zinc-800 rounded-xl p-3 mt-3 text-white">
-    <button id="sendOtpBtn" class="w-full bg-white text-black font-bold py-3 rounded-xl mt-3">Send OTP</button>
+    <input id="phone" placeholder="+27761234567" class="w-full bg-black border border-zinc-800 rounded-xl p-3 mt-3 text-white">
+    <button type="button" id="sendOtpBtn" class="w-full bg-white text-black font-bold py-3 rounded-xl mt-3" style="pointer-events:auto; z-index:99999; position:relative; cursor:pointer;">Send OTP</button>
     <div id="otpArea" class="hidden">
       <input id="otp" placeholder="Enter 6-digit OTP" class="w-full bg-black border border-zinc-800 rounded-xl p-3 mt-3 text-white">
-      <button id="verifyBtn" class="w-full bg-green-400 text-black font-bold py-3 rounded-xl mt-3">Verify & Login</button>
+      <button type="button" id="verifyBtn" class="w-full bg-green-400 text-black font-bold py-3 rounded-xl mt-3" style="pointer-events:auto; z-index:99999; position:relative; cursor:pointer;">Verify & Login</button>
     </div>
     <div class="text-center text-zinc-600 text-xs my-4">— OR SECURE WITH PASSWORD —</div>
     <input id="email" type="email" placeholder="you@email.com" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-white">
     <input id="password" type="password" placeholder="Password (min 6 chars)" class="w-full bg-black border border-zinc-800 rounded-xl p-3 mt-2 text-white">
     <div class="grid grid-cols-2 gap-2 mt-3">
-      <button id="pwdLoginBtn" class="bg-zinc-800 font-bold py-3 rounded-xl">Login</button>
-      <button id="pwdSignupBtn" class="bg-white text-black font-bold py-3 rounded-xl">Sign Up</button>
+      <button type="button" id="pwdLoginBtn" class="bg-zinc-800 font-bold py-3 rounded-xl" style="pointer-events:auto; z-index:99999; position:relative; cursor:pointer;">Login</button>
+      <button type="button" id="pwdSignupBtn" class="bg-white text-black font-bold py-3 rounded-xl" style="pointer-events:auto; z-index:99999; position:relative; cursor:pointer;">Sign Up</button>
     </div>
   </div>
 
@@ -32,7 +35,7 @@
     <div class="bg-zinc-900 rounded-2xl p-5 mt-6">
       <div id="status" class="text-xs text-zinc-500">STATUS: IDLE</div>
       <div id="proBadge" class="hidden bg-green-400 text-black text-xs font-bold px-2 py-1 rounded inline-block mt-2">PRO +20% ACTIVE</div>
-      <button id="startBtn" class="w-full bg-green-400 text-black font-black text-xl py-5 rounded-xl mt-4">START STREAMING</button>
+      <button type="button" id="startBtn" class="w-full bg-green-400 text-black font-black text-xl py-5 rounded-xl mt-4" style="pointer-events:auto; z-index:99999; position:relative; cursor:pointer;">START STREAMING</button>
       <div class="grid grid-cols-3 gap-2 mt-5 text-center">
         <div><div id="mb" class="font-bold text-lg">0 MB</div><div class="text-xs text-zinc-500">Shared</div></div>
         <div><div id="tests" class="font-bold text-lg">0</div><div class="text-xs text-zinc-500">Tests</div></div>
@@ -47,7 +50,7 @@
     </div>
     <div id="proBox" class="bg-gradient-to-br from-green-400 to-emerald-600 text-black rounded-2xl p-5 mt-4">
       <div class="font-black">Go PRO +20%</div>
-      <button id="proBtn" class="w-full bg-black text-white font-bold py-3 rounded-xl mt-3">Unlock PRO R29/week</button>
+      <button type="button" id="proBtn" class="w-full bg-black text-white font-bold py-3 rounded-xl mt-3" style="pointer-events:auto; z-index:99999; position:relative; cursor:pointer;">Unlock PRO</button>
     </div>
   </div>
 </div>
